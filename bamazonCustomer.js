@@ -55,8 +55,22 @@ function afterConnection() {
                     if (err) {
                         return console.log(err);
                     };
-                    console.log("Purchase has been made!");
-                    afterConnection();
+                    console.log("Purchase has been made!\nYou spend a total of: $" + items[itemID].price * amount);
+                    inquirer.prompt([
+                        {
+                            type: "list",
+                            message: "Would you like to make another purchase?",
+                            name: "choice",
+                            choices: ["Yes", "No"]
+                        }
+                    ]).then(res => {
+                        if(res.choice === "Yes") {
+                            afterConnection();
+                        }
+                        else {
+                            connection.end();
+                        }
+                    })
                 });
             }
             else {
@@ -64,6 +78,5 @@ function afterConnection() {
             }
         })
     });
-    
 }
   
